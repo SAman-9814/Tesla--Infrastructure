@@ -1,0 +1,2248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tesla Infrastructure Pvt. Ltd. | Construction, Tech & Engineering Excellence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTLSeB68ARYJipY1SQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary: #0d47a1;
+            --primary-dark: #0a3d8a;
+            --primary-light: #5472d3;
+            --secondary: #ff6f00;
+            --secondary-dark: #e65100;
+            --accent: #00bcd4;
+            --dark: #1a237e;
+            --light: #f5f7ff;
+            --gray: #5d6d97;
+            --light-gray: #e8eaf6;
+            --gradient-primary: linear-gradient(135deg, #0d47a1 0%, #1a237e 100%);
+            --gradient-secondary: linear-gradient(135deg, #ff6f00 0%, #ff9800 100%);
+            --gradient-accent: linear-gradient(135deg, #00bcd4 0%, #00838f 100%);
+            --gradient-hero: linear-gradient(135deg, rgba(13, 71, 161, 0.92) 0%, rgba(26, 35, 126, 0.92) 100%);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+            --shadow: 0 15px 30px rgba(13, 71, 161, 0.15);
+            --shadow-lg: 0 25px 50px rgba(13, 71, 161, 0.25);
+            --shadow-accent: 0 15px 30px rgba(255, 111, 0, 0.3);
+            --shadow-hover: 0 30px 60px rgba(13, 71, 161, 0.35);
+            --border-radius: 20px;
+            --border-radius-small: 12px;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --primary: #2196f3;
+            --primary-dark: #1976d2;
+            --primary-light: #64b5f6;
+            --secondary: #ff9800;
+            --secondary-dark: #f57c00;
+            --accent: #00bcd4;
+            --dark: #121858;
+            --light: #121212;
+            --gray: #b0bec5;
+            --light-gray: #1e1e1e;
+            --gradient-primary: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);
+            --gradient-secondary: linear-gradient(135deg, #ff9800 0%, #ff6f00 100%);
+            --gradient-accent: linear-gradient(135deg, #00bcd4 0%, #00838f 100%);
+            --gradient-hero: linear-gradient(135deg, rgba(33, 150, 243, 0.92) 0%, rgba(13, 71, 161, 0.92) 100%);
+            --shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 25px 50px rgba(0, 0, 0, 0.4);
+            --shadow-accent: 0 15px 30px rgba(255, 152, 0, 0.4);
+            --shadow-hover: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        section {
+            padding: 120px 0;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 120px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+            z-index: 999;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg) scale(1.1);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .theme-toggle i {
+            transition: var(--transition);
+        }
+
+        body.dark-mode .theme-toggle i.fa-sun {
+            display: block;
+        }
+
+        body.dark-mode .theme-toggle i.fa-moon {
+            display: none;
+        }
+
+        .theme-toggle i.fa-sun {
+            display: none;
+        }
+
+        .theme-toggle i.fa-moon {
+            display: block;
+        }
+
+        /* Header & Navbar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(15px);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        body.dark-mode header {
+            background-color: rgba(30, 30, 30, 0.97);
+        }
+
+        header.scrolled {
+            padding: 5px 0;
+            background-color: rgba(205, 212, 247, 0.99);
+        }
+
+        body.dark-mode header.scrolled {
+            background-color: rgba(30, 30, 30, 0.99);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: relative;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: 900;
+            font-size: 2rem;
+            color: var(--primary);
+            text-decoration: none;
+            z-index: 1001;
+            transition: var(--transition);
+            padding: 10px 25px;
+            border-radius: var(--border-radius);
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+        }
+
+        .logo:hover {
+            transform: translateY(-5px);
+        }
+
+        .logo span {
+            color: var(--secondary);
+        }
+
+        .logo-icon {
+            margin-right: 15px;
+            font-size: 2.5rem;
+            background: var(--gradient-secondary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navbar with Circular Effect */
+        .nav-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-sphere {
+            position: relative;
+            width: 500px;
+            height: 65px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 50px;
+            box-shadow: 
+                inset 0 5px 15px rgba(0, 0, 0, 0.05),
+                0 10px 30px rgba(13, 71, 161, 0.15);
+            padding: 0 40px;
+        }
+
+        body.dark-mode .nav-sphere {
+            background: rgba(40, 40, 40, 0.95);
+            box-shadow: 
+                inset 0 5px 15px rgba(0, 0, 0, 0.2),
+                0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 1rem;
+            padding: 14px 25px;
+            position: relative;
+            transition: var(--transition);
+            border-radius: 30px;
+            white-space: nowrap;
+        }
+
+        body.dark-mode .nav-links a {
+            color: white;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 30px;
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+            box-shadow: 0 5px 20px rgba(13, 71, 161, 0.3);
+        }
+
+        .nav-links a:hover::before {
+            opacity: 1;
+        }
+
+        .nav-links a:hover {
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .nav-indicator {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 50px;
+            width: 100px;
+            background: var(--gradient-primary);
+            border-radius: 25px;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(13, 71, 161, 0.4);
+            z-index: 1;
+        }
+
+        .nav-toggle {
+            font-size: 1.8rem;
+            cursor: pointer;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .nav-toggle:hover {
+            transform: rotate(180deg);
+            background: var(--gradient-secondary);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--dark);
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            background: url('https://images.unsplash.com/photo-1541888946425-d81bb19240f5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') center/cover no-repeat;
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-hero);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease;
+            text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(to right, #fff 0%, #ffd180 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.2s both;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.8;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 45px;
+            background: var(--gradient-secondary);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            animation: fadeInUp 1s ease 0.4s both;
+            box-shadow: var(--shadow-accent);
+            position: relative;
+            overflow: hidden;
+            font-size: 1.2rem;
+            letter-spacing: 0.5px;
+        }
+
+        .btn i {
+            margin-left: 12px;
+            transition: var(--transition);
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 30px 60px rgba(255, 111, 0, 0.5);
+        }
+
+        .btn:hover i {
+            transform: translateX(8px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 3px solid white;
+            margin-left: 30px;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            margin-bottom: 100px;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 3.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 30px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 8px;
+            background: var(--gradient-secondary);
+            border-radius: 4px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            font-size: 1.4rem;
+            max-width: 850px;
+            margin: 0 auto 70px;
+            line-height: 1.9;
+        }
+
+        /* MD Message Section */
+        .md-message {
+            background-color: #f9fbff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .md-message {
+            background-color: #1a1a1a;
+        }
+
+        .md-message::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.1;
+        }
+
+        .message-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 80px;
+            align-items: center;
+        }
+
+        .message-image {
+            position: relative;
+        }
+
+        .message-img {
+            width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            transition: var(--transition);
+        }
+
+        .message-img:hover {
+            transform: translateY(-15px) rotate(2deg);
+        }
+
+        .message-badge {
+            position: absolute;
+            bottom: -30px;
+            right: -30px;
+            width: 150px;
+            height: 150px;
+            background: var(--gradient-secondary);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            box-shadow: var(--shadow-accent);
+            z-index: 2;
+        }
+
+        .message-badge .title {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .message-badge .name {
+            font-size: 1.4rem;
+        }
+
+        .message-text h3 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .message-quote {
+            font-size: 1.3rem;
+            color: var(--gray);
+            line-height: 1.9;
+            margin-bottom: 30px;
+            padding-left: 30px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .message-signature {
+            margin-top: 40px;
+        }
+
+        .message-signature h4 {
+            color: var(--secondary);
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .message-signature p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        /* Our Agenda Section */
+        .agenda {
+            background: var(--gradient-primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agenda::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.2;
+        }
+
+        .agenda .section-title h2 {
+            background: linear-gradient(to right, #fff 0%, #ffd180 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .agenda .section-title h2::after {
+            background: var(--gradient-accent);
+        }
+
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 60px;
+        }
+
+        .agenda-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px;
+        }
+
+        .agenda-card:hover {
+            transform: translateY(-20px) scale(1.03);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .agenda-icon {
+            font-size: 3.5rem;
+            color: var(--secondary);
+            margin-bottom: 30px;
+        }
+
+        .agenda-card h4 {
+            color: white;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .agenda-card p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        /* Services Section */
+        .services {
+            background-color: #f9fbff;
+            position: relative;
+        }
+
+        body.dark-mode .services {
+            background-color: #1a1a1a;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 60px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        body.dark-mode .service-card {
+            background: #2a2a2a;
+        }
+
+        .service-card:hover {
+            transform: translateY(-20px) scale(1.03);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .service-icon {
+            height: 150px;
+            width: 100%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .service-info {
+            padding: 50px;
+        }
+
+        .service-info h4 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .service-info p {
+            color: var(--gray);
+            line-height: 1.8;
+        }
+
+        /* Projects Section */
+        .projects {
+            background: var(--gradient-primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .projects::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-secondary);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.2;
+        }
+
+        .projects .section-title h2 {
+            background: linear-gradient(to right, #fff 0%, #ffd180 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .projects .section-title h2::after {
+            background: var(--gradient-accent);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 50px;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .project-img {
+            height: 250px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .project-info {
+            padding: 40px;
+        }
+
+        .project-info h4 {
+            color: white;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .project-info p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        /* Training Section */
+        .training {
+            background-color: #f9fbff;
+            position: relative;
+        }
+
+        body.dark-mode .training {
+            background-color: #1a1a1a;
+        }
+
+        .training-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 50px;
+        }
+
+        .training-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        body.dark-mode .training-card {
+            background: #2a2a2a;
+        }
+
+        .training-card:hover {
+            transform: translateY(-15px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .training-icon {
+            height: 120px;
+            width: 100%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: white;
+        }
+
+        .training-info {
+            padding: 40px;
+        }
+
+        .training-info h4 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+        }
+
+        .training-info p {
+            color: var(--gray);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        /* Partners Section */
+        .partners {
+            background: var(--gradient-primary);
+            color: rgb(235, 224, 224);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            align-items: center;
+        }
+
+        .partner-logo {
+            height: 120px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .partner-logo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-accent);
+        }
+
+        .partner-logo:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .partner-logo img {
+            max-width: 80%;
+            max-height: 80px;
+            object-fit: contain;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 60px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        body.dark-mode .team-card {
+            background: #2a2a2a;
+        }
+
+        .team-card:hover {
+            transform: translateY(-20px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .team-card:hover .team-img {
+            transform: scale(1.1);
+        }
+
+        .team-img-container {
+            height: 400px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .team-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .team-info {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .team-info h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.6rem;
+        }
+
+        .team-info .position {
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .team-info p {
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .team-social {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .team-social a {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .team-social a:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-5px);
+        }
+
+        /* Contact & Map Section */
+        .contact-map {
+            padding: 0;
+        }
+
+        .map-container {
+            height: 600px;
+            width: 100%;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            max-width: 400px;
+            z-index: 1000;
+        }
+
+        body.dark-mode .map-overlay {
+            background: #2a2a2a;
+        }
+
+        .map-overlay h3 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .map-overlay p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .map-overlay p i {
+            color: var(--secondary);
+            margin-right: 15px;
+            font-size: 1.2rem;
+            width: 25px;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background-color: #f9fbff;
+            position: relative;
+        }
+
+        body.dark-mode .contact-section {
+            background-color: #1a1a1a;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 80px;
+            align-items: start;
+        }
+
+        .contact-info h3 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .contact-details {
+            margin-bottom: 60px;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 35px;
+        }
+
+        .contact-detail i {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 25px;
+            flex-shrink: 0;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .contact-detail-content h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .social-links a {
+            width: 55px;
+            height: 55px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.4rem;
+            box-shadow: var(--shadow);
+        }
+
+        .social-links a:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-accent);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: white;
+            padding: 60px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.dark-mode .contact-form {
+            background: #2a2a2a;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
+            height: 100%;
+            background: var(--gradient-secondary);
+        }
+
+        .contact-form h3 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .form-group {
+            margin-bottom: 35px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 20px 25px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--border-radius-small);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            background: #f9fbff;
+        }
+
+        body.dark-mode .form-control {
+            background: #1e1e1e;
+            border-color: #333;
+            color: white;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 5px rgba(13, 71, 161, 0.1);
+            background: white;
+        }
+
+        body.dark-mode .form-control:focus {
+            background: #2a2a2a;
+        }
+
+        textarea.form-control {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 100px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 400px;
+            height: 400px;
+            background: var(--gradient-accent);
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.1;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 60px;
+            margin-bottom: 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .footer-col h4 {
+            color: white;
+            margin-bottom: 35px;
+            position: relative;
+            padding-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background: var(--gradient-secondary);
+            border-radius: 2px;
+        }
+
+        .footer-col p {
+            margin-bottom: 25px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.8;
+        }
+
+        .footer-links {
+            margin-top: 20px;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            margin-bottom: 18px;
+            transition: var(--transition);
+            padding: 5px 0;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .footer-social a {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 1.2rem;
+        }
+
+        .footer-social a:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* WhatsApp Button */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 75px;
+            height: 75px;
+            background: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.8rem;
+            box-shadow: 0 10px 40px rgba(37, 211, 102, 0.5);
+            z-index: 999;
+            transition: var(--transition);
+            text-decoration: none;
+            animation: pulse-whatsapp 2s infinite;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: scale(1.2) rotate(10deg);
+            box-shadow: 0 15px 50px rgba(37, 211, 102, 0.7);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 130px;
+            right: 40px;
+            width: 55px;
+            height: 55px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.7rem;
+            box-shadow: var(--shadow);
+            z-index: 999;
+            transition: var(--transition);
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--gradient-secondary);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-accent);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-whatsapp {
+            0% { box-shadow: 0 10px 40px rgba(37, 211, 102, 0.5); }
+            50% { box-shadow: 0 10px 50px rgba(37, 211, 102, 0.8); }
+            100% { box-shadow: 0 10px 40px rgba(37, 211, 102, 0.5); }
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .nav-sphere {
+                width: 450px;
+            }
+            
+            .hero h1 {
+                font-size: 3.8rem;
+            }
+            
+            .section-title h2 {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .nav-container {
+                display: none;
+            }
+            
+            .nav-toggle {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 320px;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                padding: 120px 40px 40px;
+                box-shadow: var(--shadow-lg);
+                transition: var(--transition);
+                z-index: 1000;
+                border-radius: 0 30px 30px 0;
+            }
+            
+            body.dark-mode .nav-links {
+                background: #2a2a2a;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-indicator {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.6rem;
+            }
+            
+            .agenda-grid, .services-grid, .projects-grid, .training-grid, .team-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+            
+            .map-overlay {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: -100px 30px 0;
+                max-width: calc(100% - 60px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 90px 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero p {
+                font-size: 1.3rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2.3rem;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 25px;
+            }
+            
+            .hero-buttons {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .agenda-grid, .services-grid, .projects-grid, .training-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .whatsapp-btn {
+                bottom: 30px;
+                right: 30px;
+                width: 70px;
+                height: 70px;
+                font-size: 2.5rem;
+            }
+            
+            .back-to-top {
+                bottom: 110px;
+                right: 30px;
+            }
+            
+            .theme-toggle {
+                top: 100px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            
+            .contact-form, .service-info, .team-info, .project-info, .training-info {
+                padding: 30px;
+            }
+            
+            .container {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
+    <!-- Header & Navbar -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-building logo-icon"></i>
+                    Tesla Infra
+                </a>
+                <div class="nav-container">
+                    <div class="nav-sphere">
+                        <div class="nav-indicator" id="navIndicator"></div>
+                        <div class="nav-links" id="navLinks">
+                            <a href="#home" class="nav-link active">Home</a>
+                            <a href="#agenda" class="nav-link">Our Agenda</a>
+                            <a href="#services" class="nav-link">Services</a>
+                            <a href="#projects" class="nav-link">Projects</a>
+                            <a href="#training" class="nav-link">Training</a>
+                            <a href="#contact" class="nav-link">Contact</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="nav-toggle" id="navToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1>Building Nepal's Infrastructure Future</h1>
+                <p>Tesla Infrastructure is a premier Construction ligal service provider, Technology Service Provider and Engineering consulting and construction firm dedicated to shaping Nepal's & Globe skyline through innovative design, sustainable practices, and technical excellence. We combine traditional engineering wisdom with modern solutions to build resilient infrastructure for tomorrow.</p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn">Start Your Project <i class="fas fa-arrow-right"></i></a>
+                    <a href="#agenda" class="btn btn-outline">Our Vision <i class="fas fa-eye"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MD Message Section -->
+    <section class="md-message" id="message">
+        <div class="container">
+            <div class="section-title">
+                <h2>Message from Managing Director</h2>
+            </div>
+            <div class="message-content">
+                <div class="message-image">
+                    <img src="Images\md roshan shah.jpg" alt="Er. Roshan Sah" class="message-img">
+                    <div class="team-social">
+                            <a href="https://www.facebook.com/roshan.shah.77/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://twitter.com/TeslaInfra" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://linkedin.com/in/roshan-shah-0915" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:teslainfrastructure@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    <div class="message-badge">
+                        <div class="title">Managing Director/CEO</div>
+                        <div class="name">Er. Roshan Shah</div>
+                    </div>
+                </div>
+                <div class="message-text">
+                    <h3>Building Excellence, Creating Legacy</h3>
+                    <div class="message-quote">
+                        "At Tesla Infrastructure, we believe that great infrastructure is not just about bricks and mortar; it's about building communities, connecting world with technology, enabling progress, and creating lasting value. With over many years of experience in civil engineering consulting, construction legal services, Tech sloutions and construction, we have been privileged to contribute to Nepal's development journey in the field of Infrastructure, and Technology."
+                    </div>
+                    <p>Tesla Infrastructure Pvt. Ltd. is a multidisciplinary firm dedicated to advancing construction excellence, delivering innovative tech solutions, offering engineering education programs, and providing legal expertise in construction laws. With a commitment to sustainability and professionalism, we empower clients, learners, and partners to shape a smarter, stronger future.</p>
+                    <p>Through our training programs, we're also nurturing the next generation of Nepali engineers, ensuring that our nation's development continues to grow with skilled professionals who understand both local challenges and global best practices.</p>
+                    <div class="message-signature">
+                        <h4>Er. Roshan Sah</h4>
+                        <p>Managing Director & Founder</p>
+                        <p>Tesla Infrastructure</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Agenda Section -->
+    <section class="agenda" id="agenda">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Core Agenda</h2>
+            </div>
+            <div class="agenda-grid">
+                <div class="agenda-card">
+                    <div class="agenda-icon">
+                        <i class="fas fa-hard-hat"></i>
+                    </div>
+                    <h4>Engineering Excellence</h4>
+                    <p>At Tesla Infrastructure Pvt. Ltd., our vision is to be a pioneering force in sustainable construction, advanced technology solutions, and engineering education. We aspire to shape infrastructure that empowers communities, fosters innovation, and drives progress with integrity, professionalism, and excellence.</p>
+                </div>
+                <div class="agenda-card">
+                    <div class="agenda-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4>Client Partnership</h4>
+                    <p>Our mission at Tesla Infrastructure Pvt. Ltd. is to deliver world-class construction projects that combine durability with modern design, provide cutting-edge technology solutions that enhance efficiency, and empower learners through engineering programs that bridge theory with practical application. We also uphold strong legal expertise in construction laws, ensuring compliance, transparency, and trust in every project. With a commitment to sustainability and innovation, we strive to build smarter cities, nurture talent, and guide clients toward a stronger, more resilient future.</p>
+                </div>
+                <div class="agenda-card">
+                    <div class="agenda-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4>Knowledge Dissemination</h4>
+                    <p>Empowering Nepal's & Globe engineering community through comprehensive training programs, workshops, and technical knowledge sharing for sustainable development.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Core Services</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-drafting-compass"></i>
+                    </div>
+                    <div class="service-info">
+                        <h4>Civil Engineering Consulting</h4>
+                        <p>Comprehensive consulting services for infrastructure projects including structural design, site analysis, feasibility studies, and construction supervision.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <div class="service-info">
+                        <h4>Technology & Construction </h4>
+                        <p>End-to-end construction management for residential, commercial, and public infrastructure projects with focus on quality, timeline, and budget adherence.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="service-info">
+                        <h4>Technical Training Programs</h4>
+                        <p>Professional development courses in civil engineering fundamentals, construction management, BIM technology, and industry-specific software applications.</p>
+                    </div>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-archway"></i>
+                    </div>
+                    <div class="service-info">
+                        <h4>Architectural & 3D Modeling</h4>
+                        <p>Advanced architectural design and 3D modeling services using industry-leading software for visualization and project planning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <div class="section-title">
+                <h2>Recent Projects</h2>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <img src="Images\hero 3.jpg" alt="Commercial Complex" class="project-img">
+                    <div class="project-info">
+                        <h4>Kathmandu Commercial Complex</h4>
+                        <p>15-story commercial building with earthquake-resistant design and modern amenities in the heart of Kathmandu.</p>
+                        <a href="#contact" class="btn" style="padding: 12px 25px; font-size: 1rem;">View Details</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="Images\the-bailey-suspension-bridge.jpg" alt="Bridge Project" class="project-img">
+                    <div class="project-info">
+                        <h4>Suspension Bridge Project</h4>
+                        <p>150-meter suspension bridge connecting rural communities with advanced engineering solutions.</p>
+                        <a href="#contact" class="btn" style="padding: 12px 25px; font-size: 1rem;">View Details</a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <img src="Images\thumb.jpg" alt="Road Project" class="project-img">
+                    <div class="project-info">
+                        <h4>Municipal Road Expansion</h4>
+                        <p>22km road expansion project with proper drainage and traffic management systems for urban development.</p>
+                        <a href="#contact" class="btn" style="padding: 12px 25px; font-size: 1rem;">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Section -->
+    <section class="training" id="training">
+        <div class="container">
+            <div class="section-title">
+                <h2>Training Programs</h2>
+            </div>
+            <div class="training-grid">
+                <div class="training-card">
+                    <div class="training-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <div class="training-info">
+                        <h4>Civil Engineering Fundamentals</h4>
+                        <p>Comprehensive course covering structural analysis, construction materials, surveying, and geotechnical engineering.</p>
+                        <a href="#contact" class="btn" style="padding: 12px 25px; font-size: 1rem; width: 100%;">Enroll Now</a>
+                    </div>
+                </div>
+                <div class="training-card">
+                    <div class="training-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="training-info">
+                        <h4>Latest Technology Workshop</h4>
+                        <p>Hands-on training in Building Information Modeling using Autodesk Revit and other industry-standard software.</p>
+                        <a href="#contact" class="btn" style="padding: 12px 25px; font-size: 1rem; width: 100%;">Enroll Now</a>
+                    </div>
+                </div>
+                <div class="training-card">
+                    <div class="training-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <div class="training-info">
+                        <h4>Project Management Professional</h4>
+                        <p>Certification course for construction project managers focusing on planning, execution, and risk management.</p>
+                        <a href="#contact" class="btn" style="padding: 12px 25px; font-size: 1rem; width: 100%;">Enroll Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="partners" id="partners">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Partners</h2>
+            </div>
+            <div class="partners-grid">
+                <div class="partner-logo"><img src="Images\nea.png" alt="NEA"></div>
+                <div class="partner-logo"><img src="Images/sp logo.jpg" alt="DoR"></div>
+                <div class="partner-logo"><img src="Images/Water mark Logo @ Tesla (1).jpeg" alt="KMC"></div>
+                <div class="partner-logo"><img src="Images/Nepal_Telecom_logo.jpg" alt="NTC"></div>
+                <div class="partner-logo"><img src="Images\some real state logo.jpg" alt="DWSS"></div>
+                <div class="partner-logo"><img src="Images/w3.png" alt="NPC"></div>
+                <div class="partner-logo"><img src="Images/KMC logo.jpg" alt="KMC"></div>
+                <div class="partner-logo"><img src="Images\hero 1 (1).jpg" alt="NPC"></div>
+                <div class="partner-logo"><img src="Images/thumb.jpg" alt="KMC"></div>
+                <div class="partner-logo"><img src="Images/w1.png" alt="NPC"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Leadership Team</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-img-container">
+                        <img src="Images\Rajat Sah.png" alt="Er. Rajat Sah" class="team-img">
+                    </div>
+                    <div class="team-info">
+                        <h4>Er. Rajat Sah</h4>
+                        <div class="position">Site Engineer</div>
+                        <p>Civil Engineering expert with 7+ years experience in infrastructure projects, project management, and technical consulting across Nepal.</p>
+                        <div class="team-social">
+                            <a href="https://www.facebook.com/rajat%20sah.shah.246196/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://twitter.com/TeslaInfra" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://linkedin.com/in/rajat-sah" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:rajatsah@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-container">
+                        <img src="Images/Suraj.jpg" alt="Suraj Kumar Sah" class="team-img">
+                    </div>
+                    <div class="team-info">
+                        <h4>Er. Suraj Kumar Sah</h4>
+                        <div class="position">Juniour Software Engineer</div>
+                        <p>Technology specialist focusing on management software, tech consultant, and digital solutions for engineering workflows.</p>
+                        <div class="team-social">
+                            <a href="https://www.facebook.com/suraj.shah.246196/" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://github.com/Suraj0915" target="_blank"><i class="fab fa-github"></i></a>
+                            <a href="https://twitter.com/surajshah0915" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://linkedin.com/in/suraj-shah-0915" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:surajshah0915@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-img-container">
+                        <img src="Images/Dipesh Singh.jpeg" alt="Dipesh Singh" class="team-img">
+                    </div>
+                    <div class="team-info">
+                        <h4>Er. Dipesh Singh</h4>
+                        <div class="position">Project Director</div>
+                        <p>Construction management specialist with expertise in large-scale infrastructure projects, quality control, and regulatory compliance.</p>
+                        <div class="team-social">
+                            <a href="https://www.facebook.com/dipesh.singh.7549" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://twitter.com/dipeshsingh" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <a href="https://linkedin.com/in/dipesh-singh-0915" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:dipeshsingh@gmail.com"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="contact-map">
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="map-overlay">
+                <h3>Our Location</h3>
+                <p><i class="fas fa-map-marker-alt"></i> Sahabhagita Marga, Mid-Baneshwor</p>
+                <p><i class="fas fa-map-pin"></i> Near Ward 10 Office</p>
+                <p><i class="fas fa-city"></i> Kathmandu, Nepal</p>
+                <p><i class="fas fa-phone"></i> +977-9860999108</p>
+                <p><i class="fas fa-envelope"></i> teslainfrastructure@gmail.com</p>
+                <a href="https://maps.google.com/?q=Sahabhagita Marga+Mid-Baneshwor+Kathmandu+Nepal" target="_blank" class="btn" style="margin-top: 20px; padding: 12px 25px; display: inline-block;">Open in Google Maps</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Get In Touch</h3>
+                    <div class="contact-details">
+                        <div class="contact-detail">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div class="contact-detail-content">
+                                <h4>Office Address</h4>
+                                <p>Sahabhagita Marga, Mid-Baneshwor, near Ward 10 Office</p>
+                                <p>Kathmandu, Nepal</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-phone"></i>
+                            <div class="contact-detail-content">
+                                <h4>Phone Number</h4>
+                                <p>+977-9860999108</p>
+                                <p>+977-01-*******</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-envelope"></i>
+                            <div class="contact-detail-content">
+                                <h4>Email Address</h4>
+                                <p>teslainfrastructure@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-detail">
+                            <i class="fas fa-clock"></i>
+                            <div class="contact-detail-content">
+                                <h4>Office Hours</h4>
+                                <p>Sunday - Friday: 9:00 AM - 6:00 PM</p>
+                                <p>Saturday: 10:00 AM - 2:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 style="margin-top: 40px;">Connect With Us</h4>
+                    <div class="social-links">
+                        <a href="http://facebook.com/search/top?q=tesla%20infrastructure" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/TeslaInfra" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/company/tesla-infrastructure/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/teslainfrastructure/" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.youtube.com/@TeslaInfrastructure" target="_blank"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Send us a Message</h3>
+                    <form id="contactForm" action="https://formsubmit.co/teslainfrastructure@gmail.com" method="POST">
+                        <input type="hidden" name="_subject" value="New Contact Form Submission - Tesla Infrastructure">
+                        <input type="hidden" name="_template" value="table">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" name="subject" class="form-control">
+                                <option value="">Select a subject</option>
+                                <option value="Consulting Services">Consulting Services</option>
+                                <option value="Construction Project">Construction Project</option>
+                                <option value="Training Programs">Training Programs</option>
+                                <option value="Technology Solutions">Technology Solutions</option>
+                                <option value="Other Inquiry">Other Inquiry</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" class="form-control" placeholder="Enter your message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn" style="width: 100%;">Send Message <i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Tesla Infrastructure</h4>
+                    <p>Premier civil engineering consulting and construction firm dedicated to shaping Nepal's infrastructure future through innovation, excellence, and sustainability.</p>
+                    <div class="footer-social">
+                        <a href="http://facebook.com/search/top?q=tesla%20infrastructure" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/TeslaInfra" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/company/tesla-infrastructure/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.instagram.com/teslainfrastructure/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <div class="footer-links">
+                        <a href="#home">Home</a>
+                        <a href="#message">MD Message</a>
+                        <a href="#agenda">Our Agenda</a>
+                        <a href="#services">Services</a>
+                        <a href="#projects">Projects</a>
+                        <a href="#training">Training</a>
+                        <a href="#team">Our Team</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Our Services</h4>
+                    <div class="footer-links">
+                        <a href="#services">Civil Engineering Consulting</a>
+                        <a href="#services">Construction & Development</a>
+                        <a href="#services">Technical Training Programs</a>
+                        <a href="#projects">Infrastructure Projects</a>
+                        <a href="#training">Professional Development</a>
+                        <a href="#contact">Project Management</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Sahabhagita Marga, Mid-Baneshwor, near Ward 10 Office, Kathmandu, Nepal</p>
+                    <p><i class="fas fa-phone"></i> +977-9860999108</p>
+                    <p><i class="fas fa-envelope"></i> teslainfrastructure@gmail.com</p>
+                    <p><i class="fas fa-globe"></i> www.teslainfrastructure.com.np</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Tesla Infrastructure. All Rights Reserved. | Designed with <i class="fas fa-heart" style="color: var(--secondary);"></i> for Nepal's Infrastructure Development</p>
+                <p>designed & developed <a href="https://www.solutionspathtechnology.com.np" target="_blank">Solutionspath Technology</a></p>
+            </div>
+            <br>
+            <div class="copyright">The website is undermaintanace so some features might not work<br>You can directly mail to our mentioned mail id reach us through WhatsApp</div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/9779860999108?text=Hello%20Tesla%20Infrastructure%2C%20I%20would%20like%20to%20inquire%20about%20your%20consulting%20services" class="whatsapp-btn" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWoFqsFAB4/W6I5+0/uTNb5y0coCBex9FJYW3NkpbBnWTYFaWBrg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        // Check for saved theme or prefer-color-scheme
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+        
+        // Mobile Navigation Toggle
+        const navToggle = document.getElementById('navToggle');
+        const navLinks = document.getElementById('navLinks');
+        const navIndicator = document.getElementById('navIndicator');
+        const navItems = document.querySelectorAll('.nav-link');
+        
+        navToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            navToggle.querySelector('i').classList.toggle('fa-bars');
+            navToggle.querySelector('i').classList.toggle('fa-times');
+        });
+        
+        // Close mobile menu when clicking a link
+        navItems.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                navToggle.querySelector('i').classList.add('fa-bars');
+                navToggle.querySelector('i').classList.remove('fa-times');
+                
+                // Update active nav item
+                navItems.forEach(item => item.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+        
+        // Navbar indicator movement
+        function moveIndicator(activeLink) {
+            if (!navIndicator) return;
+            
+            const linkRect = activeLink.getBoundingClientRect();
+            const navRect = document.querySelector('.nav-sphere').getBoundingClientRect();
+            
+            const left = linkRect.left - navRect.left;
+            const width = linkRect.width;
+            
+            navIndicator.style.left = `${left}px`;
+            navIndicator.style.width = `${width}px`;
+        }
+        
+        // Set initial indicator position
+        const activeNav = document.querySelector('.nav-link.active');
+        if (activeNav && navIndicator) {
+            moveIndicator(activeNav);
+        }
+        
+        // Update indicator on hover
+        navItems.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                if (navIndicator) moveIndicator(link);
+            });
+        });
+        
+        // Reset indicator on mouse leave
+        const navSphere = document.querySelector('.nav-sphere');
+        if (navSphere && navIndicator) {
+            navSphere.addEventListener('mouseleave', () => {
+                const activeNav = document.querySelector('.nav-link.active');
+                if (activeNav) {
+                    moveIndicator(activeNav);
+                }
+            });
+        }
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const backToTop = document.getElementById('backToTop');
+            
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            // Show back to top button when scrolled down
+            if (window.scrollY > 500) {
+                backToTop.classList.add('active');
+            } else {
+                backToTop.classList.remove('active');
+            }
+            
+            // Update active nav based on scroll position
+            const sections = document.querySelectorAll('section');
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navItems.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                    if (navIndicator) moveIndicator(link);
+                }
+            });
+        });
+        
+        // Initialize map
+        function initMap() {
+            // Coordinates for Subhadhiamarga, Thapagaun, Kathmandu (approximate)
+            const teslaLocation = [27.7172, 85.3240];
+            
+            // Create map
+            const map = L.map('map').setView(teslaLocation, 16);
+            
+            // Add tile layer (OpenStreetMap)
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // Custom icon
+            const teslaIcon = L.divIcon({
+                html: '<i class="fas fa-drafting-compass" style="color: #0d47a1; font-size: 2.5rem; background: white; padding: 15px; border-radius: 50%; box-shadow: 0 5px 20px rgba(0,0,0,0.2);"></i>',
+                iconSize: [60, 60],
+                iconAnchor: [30, 60],
+                popupAnchor: [0, -60]
+            });
+            
+            // Add marker
+            const marker = L.marker(teslaLocation, {icon: teslaIcon}).addTo(map);
+            marker.bindPopup("<b>Tesla Infrastructure</b><br>Subhadhiamarga, Thapagaun<br>Near Ward 10 Office<br>Kathmandu, Nepal<br><br><i class='fas fa-phone'></i> +977-9860999108<br><i class='fas fa-envelope'></i> teslainfrastructure@gmail.com").openPopup();
+            
+            // Add circle around location
+            L.circle(teslaLocation, {
+                color: '#0d47a1',
+                fillColor: '#0d47a1',
+                fillOpacity: 0.1,
+                radius: 150
+            }).addTo(map);
+        }
+        
+        // Initialize map when page loads
+        if (typeof L !== 'undefined') {
+            initMap();
+        } else {
+            window.addEventListener('load', function() {
+                if (typeof L !== 'undefined') initMap();
+            });
+        }
+        
+        // Initialize header scroll class
+        window.dispatchEvent(new Event('scroll'));
+        
+        // Add animation to elements on scroll
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe elements for animation
+        document.querySelectorAll('.service-card, .agenda-card, .project-card, .training-card, .team-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(card);
+        });
+        
+        // Form submission feedback
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', function(e) {
+            // Form will be submitted to FormSubmit.co
+            // Show a success message
+            setTimeout(() => {
+                alert('Thank you for your message! We have received your inquiry and will contact you within 24 hours.');
+            }, 500);
+        });
+    </script>
+</body>
+</html>
