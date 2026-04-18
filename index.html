@@ -94,13 +94,17 @@
             padding: 120px 0;
         }
 
+        /* Nav Actions (Theme & Menu) */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         /* Theme Toggle */
         .theme-toggle {
-            position: fixed;
-            top: 120px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             background: var(--gradient-primary);
             border-radius: 50%;
             display: flex;
@@ -109,7 +113,7 @@
             color: white;
             font-size: 1.5rem;
             box-shadow: var(--shadow);
-            z-index: 999;
+            z-index: 1000;
             cursor: pointer;
             transition: var(--transition);
         }
@@ -157,7 +161,7 @@
         }
 
         header.scrolled {
-            padding: 5px 0;
+            padding: 0px 0;
             background-color: rgba(205, 212, 247, 0.99);
         }
 
@@ -169,20 +173,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            padding: 5px 0;
             position: relative;
         }
 
         .logo {
             display: flex;
+            flex-direction: column;
             align-items: center;
             font-weight: 900;
-            font-size: 2rem;
+            font-size: 1rem;
             color: var(--primary);
             text-decoration: none;
             z-index: 1001;
             transition: var(--transition);
-            padding: 10px 25px;
+            /* padding: 10px 25px; */
             border-radius: var(--border-radius);
             background: var(--gradient-primary);
             -webkit-background-clip: text;
@@ -193,6 +198,12 @@
 
         .logo:hover {
             transform: translateY(-5px);
+        }
+
+        .hidden-logo {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
         }
 
         .logo span {
@@ -304,7 +315,7 @@
             width: 55px;
             height: 55px;
             border-radius: 50%;
-            display: flex;
+            display: none; /* Hidden by default, shown on mobile screens */
             align-items: center;
             justify-content: center;
             background: var(--gradient-primary);
@@ -351,12 +362,13 @@
         .hero-content {
             position: relative;
             z-index: 2;
-            max-width: 900px;
+            max-width: 1000px;
             color: white;
         }
 
         .hero h1 {
             font-size: 4.5rem;
+            margin-top: 6rem;
             margin-bottom: 2rem;
             animation: fadeInUp 1s ease;
             text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
@@ -1415,7 +1427,15 @@
 
         @media (max-width: 992px) {
             .nav-container {
-                display: none;
+                position: static;
+            }
+            
+            .nav-sphere {
+                background: transparent !important;
+                box-shadow: none !important;
+                width: 0 !important;
+                height: 0 !important;
+                padding: 0 !important;
             }
             
             .nav-toggle {
@@ -1518,13 +1538,7 @@
                 bottom: 110px;
                 right: 30px;
             }
-            
-            .theme-toggle {
-                top: 100px;
-                right: 20px;
-                width: 55px;
-                height: 55px;
-            }
+
         }
 
         @media (max-width: 576px) {
@@ -1551,19 +1565,14 @@
     </style>
 </head>
 <body>
-    <!-- Theme Toggle -->
-    <div class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun"></i>
-    </div>
-
     <!-- Header & Navbar -->
     <header>
         <div class="container">
             <nav class="navbar">
                 <a href="#" class="logo">
-                    <i class="fas fa-building logo-icon"></i>
-                    Tesla Infra
+                    <!-- <i class="fas fa-building logo-icon"></i> -->
+                     <img src="./Images/logo1.png" alt="" height="50px" width="80px">
+                    Tesla Infrastructure 
                 </a>
                 <div class="nav-container">
                     <div class="nav-sphere">
@@ -1578,8 +1587,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="nav-toggle" id="navToggle">
-                    <i class="fas fa-bars"></i>
+                <div class="nav-actions">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                        <i class="fas fa-sun"></i>
+                    </div>
+                    <div class="nav-toggle" id="navToggle">
+                        <i class="fas fa-bars"></i>
+                    </div>
                 </div>
             </nav>
         </div>
@@ -2073,6 +2088,7 @@
             navLinks.classList.toggle('active');
             navToggle.querySelector('i').classList.toggle('fa-bars');
             navToggle.querySelector('i').classList.toggle('fa-times');
+            document.querySelector('.logo').classList.toggle('hidden-logo');
         });
         
         // Close mobile menu when clicking a link
@@ -2081,6 +2097,7 @@
                 navLinks.classList.remove('active');
                 navToggle.querySelector('i').classList.add('fa-bars');
                 navToggle.querySelector('i').classList.remove('fa-times');
+                document.querySelector('.logo').classList.remove('hidden-logo');
                 
                 // Update active nav item
                 navItems.forEach(item => item.classList.remove('active'));
